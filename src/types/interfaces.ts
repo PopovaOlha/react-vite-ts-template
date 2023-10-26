@@ -11,3 +11,9 @@ export interface SearchInputState {
 export interface SearchResultProps {
     results: SearchResult[];
   }
+
+export interface ErrorBoundaryProps {}
+
+export interface ErrorBoundaryState {
+  hasError: boolean;
+}
