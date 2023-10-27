@@ -17,3 +17,8 @@ export interface ErrorBoundaryProps {}
 export interface ErrorBoundaryState {
   hasError: boolean;
 }
+
+export interface AppState {
+  searchTerm: string;
+  searchResults: SearchResult[];
+}

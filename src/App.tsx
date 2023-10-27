@@ -1,16 +1,51 @@
+import { Component } from 'react';
+import SearchInput from './components/SearchInput';
+import Search from './components/SearchResult';
+import ErrorBoundary from './components/ErrorBoundary';
+import { searchApi } from './api/api';
+import { SearchResult } from './types/models';
 
-import './App.css'
-import SearchInput from './components/SearchInput'
-
-function App() {
-
-  return (
-    <>
-    <SearchInput onSearch={function (searchTerm: string): void {
-        throw new Error('Function not implemented.')
-      } } /> 
-    </>
-  )
+interface AppState {
+  searchTerm: string;
+  searchResults: SearchResult[];
 }
 
-export default App
+class App extends Component<{}, AppState> {
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      searchTerm: '',
+      searchResults: [],
+    };
+  }
+
+  handleSearch = async (searchTerm: string) => {
+    this.setState({ searchResults: [] });
+
+    try {
+      const response = await searchApi.search(searchTerm);
+      const results: SearchResult[] = response.map((result) => ({
+        name: result.name,
+        description: `Height: ${result.height}, Mass: ${result.mass}`,
+        image: `https://starwars-visualguide.com/assets/img/characters/${result.url.match(/\d+/)}.jpg`,
+      }));
+      this.setState({ searchResults: results });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  render() {
+    return (
+      <div>
+        <h1>Search App</h1>
+        <ErrorBoundary>
+          <SearchInput onSearch={this.handleSearch} />
+          <Search results={this.state.searchResults} />
+        </ErrorBoundary>
+      </div>
+    );
+  }
+}
+
+export default App;
