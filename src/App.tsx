@@ -38,7 +38,6 @@ class App extends Component<{}, AppState> {
   render() {
     return (
       <div>
-        <h1>Search App</h1>
         <ErrorBoundary>
           <SearchInput onSearch={this.handleSearch} />
           <Search results={this.state.searchResults} />

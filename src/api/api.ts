@@ -16,7 +16,7 @@ export const searchApi = {
           image: result.image,
           height: result.height,
           mass: result.mass,
-          url: result[0].url
+          url: result.url
         }));
       } catch (error) {
         console.error('Error:', error);
