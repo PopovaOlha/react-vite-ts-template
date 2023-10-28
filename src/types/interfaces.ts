@@ -10,6 +10,7 @@ export interface SearchInputState {
 
 export interface SearchResultProps {
     results: SearchResult[];
+    isLoading: boolean;
   }
 
 export interface ErrorBoundaryProps {}

@@ -10,7 +10,7 @@ export const searchApi = {
         const response = await axios.get<ApiResponse>(API_URL, { params });
         console.log('Response:', response);
         return response.data.results.map((result) => ({
-          id: result.url,
+          id: result.id,
           name: result.name,
           description: `Height: ${result.height}, Mass: ${result.mass}`,
           image: result.image,

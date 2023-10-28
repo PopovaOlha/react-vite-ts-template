@@ -1,4 +1,5 @@
 export interface SearchResult {
+    id: string;
     name: string;
     description: string;
     image: string;
@@ -8,5 +9,5 @@ export interface SearchResult {
   }
   
   export interface ApiResponse {
-    results: any[]; 
+    results: SearchResult[]; 
   }
