@@ -1,17 +1,17 @@
-import { SearchResult } from "./models";
+import { SearchResult } from './models';
 
 export interface SearchInputProps {
-    onSearch: (searchTerm: string) => void;
-  }
-  
+  onSearch: (searchTerm: string) => void;
+}
+
 export interface SearchInputState {
-    searchTerm: string;
-  }
+  searchTerm: string;
+}
 
 export interface SearchResultProps {
-    results: SearchResult[];
-    isLoading: boolean;
-  }
+  results: SearchResult[];
+  isLoading: boolean;
+}
 
 export interface ErrorBoundaryProps {}
 
