@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 
 interface ErrorBoundaryProps {
-  FallbackComponent: React.ComponentType<{ error: Error; resetErrorBoundary: () => void }>;
+  FallbackComponent: React.ComponentType<{
+    error: Error;
+    resetErrorBoundary: () => void;
+  }>;
   children: React.ReactNode;
 }
 
@@ -29,7 +32,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   render() {
     if (this.state.hasError) {
-      return <this.props.FallbackComponent error={this.state.error as Error} resetErrorBoundary={this.resetErrorBoundary} />;
+      return (
+        <this.props.FallbackComponent
+          error={this.state.error as Error}
+          resetErrorBoundary={this.resetErrorBoundary}
+        />
+      );
     }
 
     return this.props.children;

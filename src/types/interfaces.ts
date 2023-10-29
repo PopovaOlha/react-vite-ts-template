@@ -9,7 +9,11 @@ export interface SearchInputState {
 }
 
 export interface SearchResultProps {
-  results: SearchResult[];
+  results: {
+    name: string;
+    description: string;
+    image: string;
+  }[];
   isLoading: boolean;
 }
 
@@ -22,4 +26,5 @@ export interface ErrorBoundaryState {
 export interface AppState {
   searchTerm: string;
   searchResults: SearchResult[];
+  isLoading: boolean;
 }

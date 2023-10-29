@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ApiResponse, SearchResult } from '../types/models';
-import { API_URL } from './config';
+import { API_URL } from './variables';
 
 export const searchApi = {
   search: async (searchTerm: string): Promise<SearchResult[]> => {
