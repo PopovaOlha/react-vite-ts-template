@@ -30,9 +30,10 @@ class App extends Component<unknown, AppState> {
 
   handleSearch = async (searchTerm: string) => {
     this.setState({ searchResults: [], isLoading: true });
+    const limit = 30;
 
     try {
-      const response = await searchApi.search(searchTerm);
+      const response = await searchApi.search(searchTerm, limit);
       const results: SearchResult[] = response.map((result) => ({
         id: result.id,
         name: result.name,
