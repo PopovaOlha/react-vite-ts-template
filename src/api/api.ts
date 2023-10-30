@@ -3,11 +3,8 @@ import { ApiResponse, SearchResult } from '../types/models';
 import { API_URL } from './variables';
 
 export const searchApi = {
-  search: async (
-    searchTerm: string,
-    limit: number
-  ): Promise<SearchResult[]> => {
-    const params = searchTerm ? { search: searchTerm.trim(), limit } : {};
+  search: async (searchTerm: string): Promise<SearchResult[]> => {
+    const params = searchTerm ? { search: searchTerm.trim() } : {};
     try {
       const response = await axios.get<ApiResponse>(API_URL, { params });
       console.log('Response:', response);
