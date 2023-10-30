@@ -1,35 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Component } from 'react';
+import SearchInput from './components/SearchInput/SearchInput';
+import Search from './components/SearchResult/SearchResult';
+import { ErrorBoundary } from 'react-error-boundary';
+import { searchApi } from './api/api';
+import { SearchResult } from './types/models';
+import ErrorFallback from './components/ErrorFallback';
+import ErrorTestButton from './components/ErrorTestButton/ErrorTestButton';
+import { AppState } from './types/interfaces';
+import { IMAGE_URL } from './api/variables';
 
-function App() {
-  const [count, setCount] = useState(0)
+class App extends Component<unknown, AppState> {
+  constructor(props: unknown) {
+    super(props);
+    this.state = {
+      searchTerm: '',
+      searchResults: [],
+      isLoading: true,
+    };
+  }
 
-  return (
-    <>
+  componentDidMount() {
+    const savedSearchTerm = localStorage.getItem('searchTerm');
+    if (savedSearchTerm) {
+      this.handleSearch(savedSearchTerm);
+    } else {
+      this.handleSearch('');
+    }
+  }
+
+  handleSearch = async (searchTerm: string) => {
+    this.setState({ searchResults: [], isLoading: true });
+
+    try {
+      const response = await searchApi.search(searchTerm);
+      const results: SearchResult[] = response.map((result) => ({
+        id: result.id,
+        name: result.name,
+        description: `Height: ${result.height || 'N/A'}, Mass: ${
+          result.mass || 'N/A'
+        }`,
+        image: `${IMAGE_URL}${result.url.match(/\d+/)}.jpg`,
+        height: result.height || 'N/A',
+        mass: result.mass || 'N/A',
+        url: result.url,
+      }));
+
+      localStorage.setItem('searchTerm', searchTerm);
+
+      this.setState({ searchResults: results, isLoading: false });
+    } catch (error) {
+      console.error(error);
+      this.setState({ isLoading: false });
+    }
+  };
+
+  render() {
+    return (
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <SearchInput onSearch={this.handleSearch} />
+          <Search
+            results={this.state.searchResults}
+            isLoading={this.state.isLoading}
+          />
+          <ErrorTestButton />
+        </ErrorBoundary>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    );
+  }
 }
 
-export default App
+export default App;
