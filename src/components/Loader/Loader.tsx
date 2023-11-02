@@ -1,14 +1,11 @@
-import { Component } from 'react';
 import './styles.loader.css';
 
-class Loader extends Component {
-  render() {
+function Loader() {
     return (
       <div className="loader-container">
         <div className="loader"></div>
       </div>
     );
-  }
 }
 
 export default Loader;

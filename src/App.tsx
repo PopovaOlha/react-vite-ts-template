@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import SearchInput from './components/searchInput/SearchInput';
-import Search from './components/searchResult/SearchResult';
+import SearchInput from './components/SearchInput/SearchInput';
+import Search from './components/SearchResult/SearchResult';
 import { ErrorBoundary } from 'react-error-boundary';
 import { searchApi } from './api/api';
 import { SearchResult as ApiResponse } from './types/models';
-import ErrorFallback from './components/errorBoundary/ErrorFallback';
-import ErrorTestButton from './components/errorTestButton/ErrorTestButton';
+import ErrorFallback from './components/ErrorBoundary/ErrorFallback';
+import ErrorTestButton from './components/ErrorTestButton/ErrorTestButton';
 import { IMAGE_URL } from './api/variables';
 
 function App() {

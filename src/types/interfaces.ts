@@ -28,3 +28,12 @@ export interface AppState {
   searchResults: SearchResult[];
   isLoading: boolean;
 }
+
+export interface HeroCardProps {
+  hero: {
+    name: string;
+    description: string;
+    image: string;
+  };
+  onClose: () => void;
+}

@@ -1,4 +1,4 @@
-import Loader from '../loader/Loader';
+import Loader from '../Loader/Loader';
 import './SearchResult.css';
 import { SearchResultProps } from '../../types/interfaces';
 
