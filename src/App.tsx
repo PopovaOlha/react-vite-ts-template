@@ -1,39 +1,33 @@
-import { Component } from 'react';
-import SearchInput from './components/SearchInput/SearchInput';
-import Search from './components/SearchResult/SearchResult';
+import { useState, useEffect } from 'react';
+import SearchInput from './components/searchInput/SearchInput';
+import Search from './components/searchResult/SearchResult';
 import { ErrorBoundary } from 'react-error-boundary';
 import { searchApi } from './api/api';
-import { SearchResult } from './types/models';
-import ErrorFallback from './components/ErrorFallback';
-import ErrorTestButton from './components/ErrorTestButton/ErrorTestButton';
-import { AppState } from './types/interfaces';
+import { SearchResult as ApiResponse } from './types/models';
+import ErrorFallback from './components/errorBoundary/ErrorFallback';
+import ErrorTestButton from './components/errorTestButton/ErrorTestButton';
 import { IMAGE_URL } from './api/variables';
 
-class App extends Component<unknown, AppState> {
-  constructor(props: unknown) {
-    super(props);
-    this.state = {
-      searchTerm: '',
-      searchResults: [],
-      isLoading: true,
-    };
-  }
+function App() {
+  const [searchResults, setSearchResults] = useState<ApiResponse[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  componentDidMount() {
+  useEffect(() => {
     const savedSearchTerm = localStorage.getItem('searchTerm');
     if (savedSearchTerm) {
-      this.handleSearch(savedSearchTerm);
+      handleSearch(savedSearchTerm);
     } else {
-      this.handleSearch('');
+      handleSearch('');
     }
-  }
+  }, []);
 
-  handleSearch = async (searchTerm: string) => {
-    this.setState({ searchResults: [], isLoading: true });
+  const handleSearch = async (searchTerm: string) => {
+    setSearchResults([]);
+    setIsLoading(true);
 
     try {
       const response = await searchApi.search(searchTerm);
-      const results: SearchResult[] = response.map((result) => ({
+      const results: ApiResponse[] = response.map((result) => ({
         id: result.id,
         name: result.name,
         description: `Height: ${result.height || 'N/A'}, Mass: ${
@@ -47,27 +41,23 @@ class App extends Component<unknown, AppState> {
 
       localStorage.setItem('searchTerm', searchTerm);
 
-      this.setState({ searchResults: results, isLoading: false });
+      setSearchResults(results);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
   };
 
-  render() {
-    return (
-      <div>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <SearchInput onSearch={this.handleSearch} />
-          <Search
-            results={this.state.searchResults}
-            isLoading={this.state.isLoading}
-          />
-          <ErrorTestButton />
-        </ErrorBoundary>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <SearchInput onSearch={handleSearch} />
+        <Search results={searchResults} isLoading={isLoading} />
+        <ErrorTestButton />
+      </ErrorBoundary>
+    </div>
+  );
 }
 
 export default App;
