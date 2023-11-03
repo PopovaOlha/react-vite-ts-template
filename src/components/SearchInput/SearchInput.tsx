@@ -3,7 +3,9 @@ import './SearchInput.css';
 import { SearchInputProps } from '../../types/interfaces';
 
 function SearchInput(props: SearchInputProps) {
-  const [searchTerm, setSearchTerm] = useState(localStorage.getItem('searchTerm') || '');
+  const [searchTerm, setSearchTerm] = useState(
+    localStorage.getItem('searchTerm') || ''
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value.trim());

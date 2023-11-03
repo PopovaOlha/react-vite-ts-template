@@ -1,4 +1,3 @@
-
 function ErrorTestButton() {
   const handleError = () => {
     throw new Error('This is a test error');
