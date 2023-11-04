@@ -6,14 +6,13 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { searchApi } from '../api/api';
 import { SearchResult as ApiResponse } from '../types/models';
 import ErrorFallback from '../components/ErrorBoundary/ErrorFallback';
-import ErrorTestButton from '../components/ErrorTestButton/ErrorTestButton';
 import { IMAGE_URL } from '../api/variables';
 import Pagination from '../components/Pagination/Pagination';
 
 function Main() {
   const [searchResults, setSearchResults] = useState<ApiResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(2);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,15 +20,21 @@ function Main() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const page = parseInt(searchParams.get('page') || '1', 10);
     const savedSearchTerm = localStorage.getItem('searchTerm');
     if (savedSearchTerm) {
       handleSearch(savedSearchTerm, currentPage, itemsPerPage);
     } else {
-      handleSearch('', currentPage, itemsPerPage);
+      handleSearch('', page, itemsPerPage);
     }
   }, [location]);
 
-  const handleSearch = async (searchTerm: string, page: number,  itemsPerPage: number) => {
+  const handleSearch = async (
+    searchTerm: string,
+    page: number,
+    itemsPerPage: number
+  ) => {
     setSearchResults([]);
     setIsLoading(true);
     setSearchTerm(searchTerm);
@@ -75,14 +80,13 @@ function Main() {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <SearchInput onSearch={handleSearch} />
         <Search results={searchResults} isLoading={isLoading} />
-        <ErrorTestButton />
         <Pagination
-  currentPage={currentPage}
-  totalPages={Math.ceil(searchResults.length / itemsPerPage)}
-  onPageChange={handlePageChange}
-  itemsPerPage={itemsPerPage}
-  onItemsPerPageChange={handleItemsPerPageChange}
-/>
+          currentPage={currentPage}
+          totalPages={Math.ceil(searchResults.length / itemsPerPage)}
+          onPageChange={handlePageChange}
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={handleItemsPerPageChange}
+        />
       </ErrorBoundary>
     </div>
   );

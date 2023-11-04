@@ -9,5 +9,7 @@ export interface SearchResult {
 }
 
 export interface ApiResponse {
+  previous: string | null;
+  next: string | null;
   results: SearchResult[];
 }

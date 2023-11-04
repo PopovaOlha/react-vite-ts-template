@@ -1,15 +1,15 @@
-import { Link } from 'react-router-dom';
-
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  itemsPerPage: number;
-  onItemsPerPageChange: (itemsPerPage: number) => void;
-}
+import { PaginationProps } from '../../types/interfaces';
+import ErrorTestButton from '../ErrorTestButton/ErrorTestButton';
+import './Pagination.css';
 
 function Pagination(props: PaginationProps) {
-  const { currentPage, totalPages, onPageChange, itemsPerPage, onItemsPerPageChange } = props;
+  const {
+    currentPage,
+    totalPages,
+    onPageChange,
+    itemsPerPage,
+    onItemsPerPageChange,
+  } = props;
 
   const getPageNumbers = () => {
     const pages = [];
@@ -21,40 +21,43 @@ function Pagination(props: PaginationProps) {
 
   return (
     <div className="pagination">
+      <ErrorTestButton />
       <button
-        disabled={currentPage === 1}
+        className="pagination-button"
         onClick={() => {
           if (currentPage > 1) {
-            onPageChange(currentPage - 1); 
+            onPageChange(currentPage - 1);
           }
         }}
       >
-        Предыдущая
+        Previos
       </button>
       {getPageNumbers().map((page) => (
-        <Link to={`/main?page=${page}`} key={page}>
-          <button onClick={() => onPageChange(page)}>{page}</button>
-        </Link>
+        <button className="pagination-number" key={page}>
+          {page}
+        </button>
       ))}
-      <button  disabled={currentPage === 1}
+      <button
+        className="pagination-button"
         onClick={() => {
-          if (currentPage > 1) {
-            onPageChange(currentPage - 1); 
+          if (currentPage > 1 || currentPage === 1) {
+            onPageChange(currentPage + 1);
           }
         }}
       >
-    следующая
+        Next
       </button>
       <select
+        className="pagination-select"
         value={itemsPerPage}
         onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
       >
-        <option value="10">10 на странице</option>
-        <option value="20">20 на странице</option>
-        <option value="30">30 на странице</option>
+        <option value="10">10 on the page</option>
+        <option value="20">20 on the page</option>
+        <option value="30">30 on the page</option>
       </select>
     </div>
   );
 }
 
-export default Pagination
+export default Pagination;

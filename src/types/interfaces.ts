@@ -1,7 +1,12 @@
 import { SearchResult } from './models';
 
 export interface SearchInputProps {
-  onSearch: (searchTerm: string, page: number,  itemsPerPage: number) => void;
+  onSearch: (
+    searchTerm: string,
+    page: number,
+    itemsPerPage: number,
+    pageUrl: string
+  ) => void;
 }
 
 export interface SearchInputState {
@@ -36,4 +41,12 @@ export interface HeroCardProps {
     image: string;
   };
   onClose: () => void;
+}
+
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  itemsPerPage: number;
+  onItemsPerPageChange: (itemsPerPage: number) => void;
 }
