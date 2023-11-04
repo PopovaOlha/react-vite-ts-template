@@ -12,19 +12,24 @@ import Pagination from '../components/Pagination/Pagination';
 function Main() {
   const [searchResults, setSearchResults] = useState<ApiResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(2);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const location = useLocation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
+   const clearSearchInput = () => {
+    setSearchTerm('');
+    localStorage.clear();
+  };
+
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const page = parseInt(searchParams.get('page') || '1', 10);
     const savedSearchTerm = localStorage.getItem('searchTerm');
     if (savedSearchTerm) {
-      handleSearch(savedSearchTerm, currentPage, itemsPerPage);
+      handleSearch(savedSearchTerm, page, itemsPerPage);
     } else {
       handleSearch('', page, itemsPerPage);
     }
@@ -67,6 +72,7 @@ function Main() {
     setCurrentPage(page);
     navigate(`/main?page=${page}`);
     handleSearch(searchTerm, page, itemsPerPage);
+    clearSearchInput();
   };
 
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
