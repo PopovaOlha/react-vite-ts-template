@@ -5,7 +5,7 @@ import Search from '../components/SearchResult/SearchResult';
 import { ErrorBoundary } from 'react-error-boundary';
 import { searchApi } from '../api/api';
 import { SearchResult as ApiResponse } from '../types/models';
-import ErrorFallback from '../components/ErrorBoundary/ErrorFallback';
+import ErrorFallback from '../components/errorBoundary/ErrorFallback';
 import { IMAGE_URL } from '../api/variables';
 import Pagination from '../components/Pagination/Pagination';
 
