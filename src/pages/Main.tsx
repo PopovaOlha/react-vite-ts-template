@@ -14,22 +14,22 @@ function Main() {
   const [searchResults, setSearchResults] = useState<ApiResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
 
   const location = useLocation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     const savedSearchTerm = localStorage.getItem('searchTerm');
     if (savedSearchTerm) {
-      handleSearch(savedSearchTerm, currentPage);
+      handleSearch(savedSearchTerm, currentPage, itemsPerPage);
     } else {
-      handleSearch('', currentPage);
+      handleSearch('', currentPage, itemsPerPage);
     }
   }, [location]);
 
-  const handleSearch = async (searchTerm: string, page: number) => {
+  const handleSearch = async (searchTerm: string, page: number,  itemsPerPage: number) => {
     setSearchResults([]);
     setIsLoading(true);
     setSearchTerm(searchTerm);
@@ -61,7 +61,13 @@ function Main() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     navigate(`/main?page=${page}`);
-    handleSearch(searchTerm, page);
+    handleSearch(searchTerm, page, itemsPerPage);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+    handleSearch(searchTerm, 1, newItemsPerPage);
   };
 
   return (
@@ -71,10 +77,12 @@ function Main() {
         <Search results={searchResults} isLoading={isLoading} />
         <ErrorTestButton />
         <Pagination
-          currentPage={currentPage}
-          totalPages={Math.ceil(searchResults.length / itemsPerPage)}
-          onPageChange={handlePageChange}
-        />
+  currentPage={currentPage}
+  totalPages={Math.ceil(searchResults.length / itemsPerPage)}
+  onPageChange={handlePageChange}
+  itemsPerPage={itemsPerPage}
+  onItemsPerPageChange={handleItemsPerPageChange}
+/>
       </ErrorBoundary>
     </div>
   );

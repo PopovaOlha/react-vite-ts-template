@@ -1,7 +1,7 @@
 import { SearchResult } from './models';
 
 export interface SearchInputProps {
-  onSearch: (searchTerm: string, page: number) => void;
+  onSearch: (searchTerm: string, page: number,  itemsPerPage: number) => void;
 }
 
 export interface SearchInputState {
