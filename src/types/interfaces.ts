@@ -33,14 +33,14 @@ export interface SearchInputState {
 
 export interface SearchResultProps {
   results: {
+    url: string;
     name: string;
     description: string;
     image: string;
   }[];
   isLoading: boolean;
+  onResultClick: (itemId: string) => void;
 }
-
-export interface ErrorBoundaryProps {}
 
 export interface ErrorBoundaryState {
   hasError: boolean;

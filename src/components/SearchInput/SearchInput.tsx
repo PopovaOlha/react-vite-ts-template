@@ -12,7 +12,7 @@ function SearchInput(props: SearchInputProps) {
   };
 
   const handleSearch = () => {
-    props.onSearch(searchTerm,  1, 10, '');
+    props.onSearch(searchTerm, 1, 10, '');
     localStorage.setItem('searchTerm', searchTerm);
   };
 

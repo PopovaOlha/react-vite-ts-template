@@ -20,7 +20,7 @@ function Main() {
   const [searchTerm, setSearchTerm] = useState('');
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-   const clearSearchInput = () => {
+  const clearSearchInput = () => {
     setSearchTerm('');
     localStorage.clear();
   };
@@ -82,11 +82,19 @@ function Main() {
     handleSearch(searchTerm, 1, newItemsPerPage);
   };
 
+  const handleResultClick = (itemId: string) => {
+    navigate(`/details/${itemId}`);
+  };
+
   return (
-    <div className='main-container'>
+    <div className="main-container">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <SearchInput onSearch={handleSearch} />
-        <Search results={searchResults} isLoading={isLoading} />
+        <Search
+          results={searchResults}
+          isLoading={isLoading}
+          onResultClick={handleResultClick}
+        />
         <Pagination
           currentPage={currentPage}
           totalPages={Math.ceil(searchResults.length / itemsPerPage)}
