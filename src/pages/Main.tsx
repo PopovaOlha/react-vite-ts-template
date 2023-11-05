@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import './Main.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SearchInput from '../components/SearchInput/SearchInput';
 import Search from '../components/SearchResult/SearchResult';
@@ -82,7 +83,7 @@ function Main() {
   };
 
   return (
-    <div>
+    <div className='main-container'>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <SearchInput onSearch={handleSearch} />
         <Search results={searchResults} isLoading={isLoading} />

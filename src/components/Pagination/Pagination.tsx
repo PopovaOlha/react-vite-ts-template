@@ -34,7 +34,7 @@ function Pagination(props: PaginationProps) {
       </button>
       {getPageNumbers().map((page) => (
         <button className="pagination-number" key={page}>
-          {page}
+          {currentPage}
         </button>
       ))}
       <button

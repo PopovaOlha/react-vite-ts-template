@@ -1,9 +1,5 @@
 import React from 'react';
-
-interface ErrorFallbackProps {
-  error: Error;
-  resetErrorBoundary: () => void;
-}
+import { ErrorFallbackProps } from '../../types/interfaces';
 
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   error,

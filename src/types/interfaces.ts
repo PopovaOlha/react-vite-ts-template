@@ -1,5 +1,23 @@
 import { SearchResult } from './models';
 
+export interface ErrorBoundaryProps {
+  FallbackComponent: React.ComponentType<{
+    error: Error;
+    resetErrorBoundary: () => void;
+  }>;
+  children: React.ReactNode;
+}
+
+export interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+export interface ErrorFallbackProps {
+  error: Error;
+  resetErrorBoundary: () => void;
+}
+
 export interface SearchInputProps {
   onSearch: (
     searchTerm: string,
