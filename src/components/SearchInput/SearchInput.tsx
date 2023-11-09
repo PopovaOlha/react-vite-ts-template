@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import './SearchInput.css';
+import React from 'react';
+import { useAppState } from '../AppStateContext/AppStateContext';
 import { SearchInputProps } from '../../types/interfaces';
+import './SearchInput.css';
 
 function SearchInput(props: SearchInputProps) {
-  const [searchTerm, setSearchTerm] = useState(
-    localStorage.getItem('searchTerm') || ''
-  );
+  const { state, dispatch } = useAppState();
+  const { searchTerm } = state;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value.trim());
+    const newSearchTerm = e.target.value.trim();
+    dispatch({ type: 'SET_SEARCH_TERM', payload: newSearchTerm });
   };
 
   const handleSearch = () => {
