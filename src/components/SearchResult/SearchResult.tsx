@@ -1,6 +1,7 @@
 import Loader from '../Loader/Loader';
 import './SearchResult.css';
 import { SearchResultProps } from '../../types/interfaces';
+import { IMAGE_URL } from '../../api/variables';
 
 function SearchResult(props: SearchResultProps) {
   const { results, isLoading, onResultClick } = props;
@@ -25,7 +26,10 @@ function SearchResult(props: SearchResultProps) {
             >
               <h3>{result.name}</h3>
               <p>{result.description}</p>
-              <img src={result.image} alt={result.name} />
+              <img
+                src={`${IMAGE_URL}${result.url.match(/\d+/)}.jpg`}
+                alt={result.name}
+              />
             </div>
           ))}
         </div>

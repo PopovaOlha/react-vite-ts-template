@@ -2,27 +2,28 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Details.css';
-import { IMAGE_URL } from '../../api/variables';
+import { API_URL, IMAGE_URL } from '../../api/variables';
 
 function Details() {
-  const { itemId } = useParams();
   const location = useLocation();
+  const { itemId } = useParams();
   const navigate = useNavigate();
+  const { page } = useParams();
+
   const [details, setDetails] = useState<{
     name: string;
     height: string;
     mass: string;
     url: string;
   } | null>(null);
+
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchDetails = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `https://swapi.dev/api/people/${itemId}/`
-        );
+        const response = await axios.get(`${API_URL}/${itemId}/`);
         const data = response.data;
         setDetails(data);
       } catch (error) {
@@ -35,7 +36,7 @@ function Details() {
   }, [itemId, location]);
 
   const handleCloseDetails = () => {
-    navigate('/');
+    navigate(`/main?page=${page}`);
   };
 
   return (

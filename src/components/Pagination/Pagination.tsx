@@ -1,15 +1,12 @@
+import { useSearchParams } from 'react-router-dom';
 import { PaginationProps } from '../../types/interfaces';
 import ErrorTestButton from '../ErrorTestButton/ErrorTestButton';
 import './Pagination.css';
 
 function Pagination(props: PaginationProps) {
-  const {
-    currentPage,
-    totalPages,
-    onPageChange,
-    itemsPerPage,
-    onItemsPerPageChange,
-  } = props;
+  const { totalPages, page } = props;
+  const [searchParam, setParams] = useSearchParams();
+  const itemsPerPage = searchParam.get('perPage');
 
   const getPageNumbers = () => {
     const pages = [];
@@ -19,38 +16,52 @@ function Pagination(props: PaginationProps) {
     return pages;
   };
 
+  const setPage = (page: string) => {
+    setParams((prev) => {
+      prev.set('page', page);
+      return prev;
+    });
+  };
+  const setPerPage = (perPage: string) => {
+    setParams((prev) => {
+      prev.set('perPage', perPage);
+      return prev;
+    });
+  };
+
   return (
     <div className="pagination">
       <ErrorTestButton />
       <button
         className="pagination-button"
+        disabled={page === 1}
         onClick={() => {
-          if (currentPage > 1) {
-            onPageChange(currentPage - 1);
+          if (page > 1) {
+            setPage((page - 1).toString());
           }
+
+          page === 0 ? setPage('1') : setPage((page - 1).toString());
         }}
       >
         Previos
       </button>
       {getPageNumbers().map((page) => (
         <button className="pagination-number" key={page}>
-          {currentPage}
+          {page}
         </button>
       ))}
       <button
         className="pagination-button"
         onClick={() => {
-          if (currentPage > 1 || currentPage === 1) {
-            onPageChange(currentPage + 1);
-          }
+          page === 0 ? setPage('1') : setPage((page + 1).toString());
         }}
       >
         Next
       </button>
       <select
         className="pagination-select"
-        value={itemsPerPage}
-        onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
+        value={itemsPerPage || 10}
+        onChange={(e) => setPerPage(e.target.value)}
       >
         <option value="10">10 on the page</option>
         <option value="20">20 on the page</option>

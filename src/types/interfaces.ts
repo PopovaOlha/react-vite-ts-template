@@ -62,9 +62,6 @@ export interface HeroCardProps {
 }
 
 export interface PaginationProps {
-  currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
-  itemsPerPage: number;
-  onItemsPerPageChange: (itemsPerPage: number) => void;
+  page: number;
 }

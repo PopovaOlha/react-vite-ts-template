@@ -14,15 +14,7 @@ export const searchApi = {
     try {
       const response = await axios.get<ApiResponse>(API_URL, { params });
       console.log('Response:', response);
-      return response.data.results.map((result) => ({
-        id: result.id,
-        name: result.name,
-        description: `Height: ${result.height}, Mass: ${result.mass}`,
-        image: result.image,
-        height: result.height,
-        mass: result.mass,
-        url: result.url,
-      }));
+      return response.data.results;
     } catch (error) {
       console.error('Error:', error);
       throw new Error('Failed to fetch data');
