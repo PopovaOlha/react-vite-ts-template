@@ -8,7 +8,6 @@ function Details() {
   const location = useLocation();
   const { itemId } = useParams();
   const navigate = useNavigate();
-  const { page } = useParams();
 
   const [details, setDetails] = useState<{
     name: string;
@@ -36,7 +35,7 @@ function Details() {
   }, [itemId, location]);
 
   const handleCloseDetails = () => {
-    navigate(`/main?page=${page}`);
+    navigate(`/main`);
   };
 
   return (
