@@ -1,10 +1,13 @@
+import { useAppState } from '../AppStateContext/AppStateContext';
 import Loader from '../Loader/Loader';
-import './SearchResult.css';
+import './ItemsList.css';
 import { SearchResultProps } from '../../types/interfaces';
 import { IMAGE_URL } from '../../api/variables';
 
 function SearchResult(props: SearchResultProps) {
-  const { results, isLoading, onResultClick } = props;
+  const { isLoading, onResultClick } = props;
+  const { state } = useAppState();
+  const { searchResults } = state;
 
   const handleItemClick = (url: string) => {
     const urlParts = url.split('/');
@@ -18,7 +21,7 @@ function SearchResult(props: SearchResultProps) {
         <Loader />
       ) : (
         <div className="search-result-container">
-          {results.map((result) => (
+          {searchResults.map((result) => (
             <div
               key={result.name}
               className="search-result-card"

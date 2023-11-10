@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import './Main.css';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import SearchInput from '../components/SearchInput/SearchInput';
-import Search from '../components/SearchResult/SearchResult';
+import Search from '../components/ItemsList/ItemsList';
 import { ErrorBoundary } from 'react-error-boundary';
 import { searchApi } from '../api/api';
-import { SearchResult as ApiResponse } from '../types/models';
 import ErrorFallback from '../components/errorBoundary/ErrorFallback';
 import Pagination from '../components/Pagination/Pagination';
+import { useAppState } from '../components/AppStateContext/AppStateContext';
+import { ApiResponse } from '../types/models';
 
 function Main() {
-  const [searchResults, setSearchResults] = useState<ApiResponse[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const { state, dispatch } = useAppState();
+  const { searchResults, isLoading } = state;
 
+  const navigate = useNavigate();
   const [params] = useSearchParams();
   const page = params.get('page');
   const perPage = params.get('perPage');
-  console.log('page: ', page);
 
   useEffect(() => {
     handleSearch(
@@ -32,18 +32,22 @@ function Main() {
     page: number,
     itemsPerPage: number
   ) => {
-    setIsLoading(true);
+    dispatch({ type: 'SET_IS_LOADING', payload: true });
     try {
-      const response = await searchApi.search(searchTerm, page, itemsPerPage);
+      const response: ApiResponse = await searchApi.search(
+        searchTerm,
+        page,
+        itemsPerPage
+      );
       console.log('response: ', response);
 
       localStorage.setItem('searchTerm', searchTerm);
 
-      setSearchResults(response);
-      setIsLoading(false);
+      dispatch({ type: 'SET_SEARCH_RESULTS', payload: response.results || [] });
+      dispatch({ type: 'SET_IS_LOADING', payload: false });
     } catch (error) {
       console.error(error);
-      setIsLoading(false);
+      dispatch({ type: 'SET_IS_LOADING', payload: false });
     }
   };
 

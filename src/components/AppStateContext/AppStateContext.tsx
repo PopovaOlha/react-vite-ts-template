@@ -1,14 +1,20 @@
-import React, { createContext, useContext, ReactNode, useReducer, Dispatch } from 'react';
-import { ApiResponse } from '../../types/models';
+import React, {
+  createContext,
+  useContext,
+  ReactNode,
+  useReducer,
+  Dispatch,
+} from 'react';
+import { SearchResult } from '../../types/models';
 
 interface AppState {
-  searchResults: ApiResponse[];
+  searchResults: SearchResult[];
   isLoading: boolean;
   searchTerm: string;
 }
 
 type Action =
-  | { type: 'SET_SEARCH_RESULTS'; payload: ApiResponse[] }
+  | { type: 'SET_SEARCH_RESULTS'; payload: SearchResult[] }
   | { type: 'SET_IS_LOADING'; payload: boolean }
   | { type: 'SET_SEARCH_TERM'; payload: string };
 
@@ -17,7 +23,9 @@ interface AppStateContextProps {
   dispatch: Dispatch<Action>;
 }
 
-const AppStateContext = createContext<AppStateContextProps | undefined>(undefined);
+const AppStateContext = createContext<AppStateContextProps | undefined>(
+  undefined
+);
 
 const initialState: AppState = {
   searchResults: [],
@@ -38,7 +46,9 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
   }
 };
 
-export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AppStateProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(appStateReducer, initialState);
 
   return (

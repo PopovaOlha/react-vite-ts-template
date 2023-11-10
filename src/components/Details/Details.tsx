@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useAppState } from '../AppStateContext/AppStateContext';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Details.css';
 import { API_URL, IMAGE_URL } from '../../api/variables';
+import { useEffect, useState } from 'react';
 
 function Details() {
-  const location = useLocation();
   const { itemId } = useParams();
   const navigate = useNavigate();
+  const { state, dispatch } = useAppState();
+  const { isLoading } = state;
 
   const [details, setDetails] = useState<{
     name: string;
@@ -16,11 +18,9 @@ function Details() {
     url: string;
   } | null>(null);
 
-  const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
     const fetchDetails = async () => {
-      setIsLoading(true);
+      dispatch({ type: 'SET_IS_LOADING', payload: true });
       try {
         const response = await axios.get(`${API_URL}/${itemId}/`);
         const data = response.data;
@@ -28,11 +28,11 @@ function Details() {
       } catch (error) {
         console.error('Error fetching details:', error);
       }
-      setIsLoading(false);
+      dispatch({ type: 'SET_IS_LOADING', payload: false });
     };
 
     fetchDetails();
-  }, [itemId, location]);
+  }, [itemId, dispatch]);
 
   const handleCloseDetails = () => {
     navigate(`/main`);

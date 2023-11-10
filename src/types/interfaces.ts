@@ -39,7 +39,7 @@ export interface SearchResultProps {
     image: string;
   }[];
   isLoading: boolean;
-  onResultClick: (itemId: string) => void;
+  onResultClick: (url: string) => void;
 }
 
 export interface ErrorBoundaryState {

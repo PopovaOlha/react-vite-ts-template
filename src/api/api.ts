@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { ApiResponse, SearchResult } from '../types/models';
+import axios, { AxiosResponse } from 'axios';
+import { ApiResponse } from '../types/models';
 import { API_URL } from './variables';
 
 export const searchApi = {
@@ -7,14 +7,16 @@ export const searchApi = {
     searchTerm: string,
     page: number,
     itemsPerPage: number
-  ): Promise<SearchResult[]> => {
+  ): Promise<ApiResponse> => {
     const params = searchTerm
       ? { search: searchTerm.trim(), page, itemsPerPage }
       : { page, itemsPerPage };
     try {
-      const response = await axios.get<ApiResponse>(API_URL, { params });
+      const response: AxiosResponse<ApiResponse> = await axios.get(API_URL, {
+        params,
+      });
       console.log('Response:', response);
-      return response.data.results;
+      return response.data;
     } catch (error) {
       console.error('Error:', error);
       throw new Error('Failed to fetch data');
