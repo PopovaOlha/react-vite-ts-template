@@ -4,6 +4,7 @@ import axios from 'axios';
 import './Details.css';
 import { API_URL, IMAGE_URL } from '../../api/variables';
 import { useEffect, useState } from 'react';
+import React from 'react';
 
 function Details() {
   const { itemId } = useParams();
