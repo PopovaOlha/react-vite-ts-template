@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint . --ext .tsx --ext .tsx",
     "prepare": "husky install",
-    "lintstaged": "lint-staged --relative",
     "format:fix": "prettier --write src/**/*.{js,jsx,ts,tsx}",
+    "precommit": "lint-staged",
     "coverage": "vitest run --coverage",
     "test": "vitest"
   },
@@ -49,5 +49,11 @@
     "vite": "^4.1.0",
     "vite-plugin-eslint": "^1.8.1",
     "vitest": "^0.29.8"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

@@ -9,6 +9,7 @@ import Pagination from '../components/Pagination/Pagination';
 import { useAppState } from '../components/AppStateContext/AppStateContext';
 import { ApiResponse } from '../types/models';
 import './Main.css';
+import React from 'react';
 
 function Main() {
   const { state, dispatch } = useAppState();
