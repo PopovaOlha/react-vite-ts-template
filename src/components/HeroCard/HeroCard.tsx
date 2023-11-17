@@ -1,3 +1,4 @@
+import React from 'react';
 import './HeroCard.css';
 import { HeroCardProps } from '../../types/interfaces';
 

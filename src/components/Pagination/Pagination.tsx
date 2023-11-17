@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PaginationProps } from '../../types/interfaces';
 import ErrorTestButton from '../ErrorTestButton/ErrorTestButton';

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useAppState } from '../AppStateContext/AppStateContext';
 import Loader from '../Loader/Loader';
 import './ItemsList.css';
