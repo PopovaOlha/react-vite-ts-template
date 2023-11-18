@@ -6,14 +6,18 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { searchApi } from '../api/api';
 import ErrorFallback from '../components/errorBoundary/ErrorFallback';
 import Pagination from '../components/Pagination/Pagination';
-import { useAppState } from '../components/AppStateContext/AppStateContext';
 import { ApiResponse } from '../types/models';
 import './Main.css';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchResults, setIsLoading } from '../reducers/appStateReducer';
+import { RootState } from 'stores/store';
 
 function Main() {
-  const { state, dispatch } = useAppState();
-  const { searchResults, isLoading } = state;
+  const dispatch = useDispatch();
+  const { searchResults, isLoading } = useSelector(
+    (state: RootState) => state.appState
+  );
 
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -22,7 +26,7 @@ function Main() {
 
   const handleSearch = useCallback(
     async (searchTerm: string, page: number, itemsPerPage: number) => {
-      dispatch({ type: 'SET_IS_LOADING', payload: true });
+      dispatch(setIsLoading(true));
       try {
         const response: ApiResponse = await searchApi.search(
           searchTerm,
@@ -33,14 +37,11 @@ function Main() {
 
         localStorage.setItem('searchTerm', searchTerm);
 
-        dispatch({
-          type: 'SET_SEARCH_RESULTS',
-          payload: response.results || [],
-        });
-        dispatch({ type: 'SET_IS_LOADING', payload: false });
+        dispatch(setSearchResults(response.results || []));
+        dispatch(setIsLoading(false));
       } catch (error) {
         console.error(error);
-        dispatch({ type: 'SET_IS_LOADING', payload: false });
+        dispatch(setIsLoading(false));
       }
     },
     [dispatch]

@@ -1,12 +1,13 @@
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './stores/store';
 import Main from './pages/Main';
 import Details from './components/Details/Details';
-import { AppStateProvider } from './components/AppStateContext/AppStateContext';
-import React from 'react';
 
 function App() {
   return (
-    <AppStateProvider>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Main />} />
@@ -15,7 +16,7 @@ function App() {
           <Route path="/:page" element={<Main />} />
         </Routes>
       </BrowserRouter>
-    </AppStateProvider>
+    </Provider>
   );
 }
 
