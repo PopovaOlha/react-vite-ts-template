@@ -1,0 +1,44 @@
+
+.details-container {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 4rem;
+    margin: 3rem;
+    background-color: #f0f0f0;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .details-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .details-description {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .hero-card  {
+    max-width: 100%;
+    max-height: 200px;
+    margin-top: 16px;
+    border-radius: 8px;
+  }
+  
+  .close-button {
+    display: block;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 30px auto;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .close-button:hover {
+    background-color: #c0392b;
+  }
