@@ -6,6 +6,9 @@ const appStateSlice = createSlice({
     searchResults: [],
     isLoading: false,
     searchTerm: '',
+    pageNumber: 1,
+    itemsPerPage: 10,
+    imageUrl: '',
   },
   reducers: {
     setSearchResults: (state, action) => {
@@ -17,9 +20,24 @@ const appStateSlice = createSlice({
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;
     },
+    setPageNumber: (state, action) => {
+      state.pageNumber = action.payload;
+    },
+    setItemsPerPage: (state, action) => {
+      state.itemsPerPage = action.payload;
+    },
+    setImageUrl: (state, action) => {
+      state.imageUrl = action.payload;
+    },
   },
 });
 
-export const { setSearchResults, setIsLoading, setSearchTerm } =
-  appStateSlice.actions;
+export const {
+  setSearchResults,
+  setIsLoading,
+  setSearchTerm,
+  setPageNumber,
+  setItemsPerPage,
+  setImageUrl,
+} = appStateSlice.actions;
 export default appStateSlice.reducer;

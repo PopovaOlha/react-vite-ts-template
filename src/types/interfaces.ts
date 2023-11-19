@@ -62,6 +62,7 @@ export interface HeroCardProps {
 }
 
 export interface PaginationProps {
+  totalResults: number;
   totalPages: number;
   page: number;
 }

@@ -1,16 +1,18 @@
-import { useAppState } from '../AppStateContext/AppStateContext';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Details.css';
 import { API_URL, IMAGE_URL } from '../../api/variables';
-import { useEffect, useState } from 'react';
-import React from 'react';
+import { setIsLoading } from '../../reducers/appStateReducer';
+import { RootState } from '../../stores/store';
 
 function Details() {
   const { itemId } = useParams();
   const navigate = useNavigate();
-  const { state, dispatch } = useAppState();
-  const { isLoading } = state;
+  const dispatch = useDispatch();
+
+  const isLoading = useSelector((state: RootState) => state.appState.isLoading);
 
   const [details, setDetails] = useState<{
     name: string;
@@ -21,15 +23,15 @@ function Details() {
 
   useEffect(() => {
     const fetchDetails = async () => {
-      dispatch({ type: 'SET_IS_LOADING', payload: true });
+      dispatch(setIsLoading(true));
       try {
         const response = await axios.get(`${API_URL}/${itemId}/`);
         const data = response.data;
         setDetails(data);
       } catch (error) {
-        console.error('Error fetching details:', error);
+        console.error('Ошибка при загрузке деталей:', error);
       }
-      dispatch({ type: 'SET_IS_LOADING', payload: false });
+      dispatch(setIsLoading(false));
     };
 
     fetchDetails();
@@ -42,7 +44,7 @@ function Details() {
   return (
     <div className="details-container">
       {isLoading ? (
-        <div>Loading details...</div>
+        <div>Loading...</div>
       ) : details ? (
         <div>
           <h2 className="details-title">{details.name || 'N/A'}</h2>
@@ -60,7 +62,7 @@ function Details() {
           </button>
         </div>
       ) : (
-        <div>No details available for this item.</div>
+        <div>Детали для этого элемента недоступны.</div>
       )}
     </div>
   );

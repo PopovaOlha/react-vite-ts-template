@@ -1,15 +1,20 @@
 import React from 'react';
-import { useAppState } from '../AppStateContext/AppStateContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchTerm } from '../../reducers/appStateReducer';
+import { RootState } from '../../stores/store';
+
 import { SearchInputProps } from '../../types/interfaces';
 import './SearchInput.css';
 
 function SearchInput(props: SearchInputProps) {
-  const { state, dispatch } = useAppState();
-  const { searchTerm } = state;
+  const dispatch = useDispatch();
+  const searchTerm = useSelector(
+    (state: RootState) => state.appState.searchTerm
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value.trim();
-    dispatch({ type: 'SET_SEARCH_TERM', payload: newSearchTerm });
+    dispatch(setSearchTerm(newSearchTerm));
   };
 
   const handleSearch = () => {

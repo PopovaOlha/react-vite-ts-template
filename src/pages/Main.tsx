@@ -77,6 +77,7 @@ function Main() {
             perPage ? Math.ceil(searchResults.length / Number(perPage)) : 0
           }
           page={page === null ? 0 : Number(page)}
+          totalResults={searchResults.length}
         />
       </ErrorBoundary>
     </div>

@@ -1,13 +1,21 @@
-import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { PaginationProps } from '../../types/interfaces';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPageNumber, setItemsPerPage } from '../../reducers/appStateReducer';
 import ErrorTestButton from '../ErrorTestButton/ErrorTestButton';
 import './Pagination.css';
+import { RootState } from '../../stores/store';
 
 function Pagination(props: PaginationProps) {
-  const { totalPages, page } = props;
+  const { totalPages } = props;
   const [searchParam, setParams] = useSearchParams();
-  const itemsPerPage = searchParam.get('perPage');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const page = Number(searchParam.get('page')) || 1;
+  const itemsPerPage = useSelector(
+    (state: RootState) => state.appState.itemsPerPage
+  );
 
   const getPageNumbers = () => {
     const pages = [];
@@ -17,17 +25,27 @@ function Pagination(props: PaginationProps) {
     return pages;
   };
 
-  const setPage = (page: string) => {
+  const setPage = (newPage: number) => {
+    dispatch(setPageNumber(newPage));
     setParams((prev) => {
-      prev.set('page', page);
+      prev.set('page', newPage.toString());
       return prev;
     });
+    navigate(`/main?page=${newPage}&perPage=${itemsPerPage}`);
   };
-  const setPerPage = (perPage: string) => {
+
+  useEffect(() => {
+    const currentPage = page === null ? 1 : Number(page);
+    setPage(currentPage);
+  }, [page, itemsPerPage]);
+
+  const setPerPage = (newPerPage: number) => {
+    dispatch(setItemsPerPage(newPerPage));
     setParams((prev) => {
-      prev.set('perPage', perPage);
+      prev.set('perPage', newPerPage.toString());
       return prev;
     });
+    navigate(`/main?page=${page}&perPage=${newPerPage}`);
   };
 
   return (
@@ -35,34 +53,29 @@ function Pagination(props: PaginationProps) {
       <ErrorTestButton />
       <button
         className="pagination-button"
-        disabled={page === 1}
-        onClick={() => {
-          if (page > 1) {
-            setPage((page - 1).toString());
-          }
-
-          page === 0 ? setPage('1') : setPage((page - 1).toString());
-        }}
+        disabled={page === 0}
+        onClick={() => setPage(page - 1)}
       >
-        Previos
+        Previous
       </button>
-      {getPageNumbers().map((page) => (
-        <button className="pagination-number" key={page}>
-          {page}
+      {getPageNumbers().map((pageNumber) => (
+        <button
+          key={pageNumber}
+          className={`pagination-number ${
+            pageNumber === +page ? 'active' : ''
+          }`}
+          onClick={() => setPage(pageNumber)}
+        >
+          {pageNumber}
         </button>
       ))}
-      <button
-        className="pagination-button"
-        onClick={() => {
-          page === 0 ? setPage('1') : setPage((page + 1).toString());
-        }}
-      >
+      <button className="pagination-button" onClick={() => setPage(page + 1)}>
         Next
       </button>
       <select
         className="pagination-select"
-        value={itemsPerPage || 10}
-        onChange={(e) => setPerPage(e.target.value)}
+        value={itemsPerPage}
+        onChange={(e) => setPerPage(Number(e.target.value))}
       >
         <option value="10">10 on the page</option>
         <option value="20">20 on the page</option>

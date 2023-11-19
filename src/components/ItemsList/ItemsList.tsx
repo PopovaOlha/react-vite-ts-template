@@ -1,19 +1,26 @@
 import React from 'react';
-import { useAppState } from '../AppStateContext/AppStateContext';
-import Loader from '../Loader/Loader';
-import './ItemsList.css';
+import { useDispatch, useSelector } from 'react-redux';
 import { SearchResultProps } from '../../types/interfaces';
+import { setImageUrl } from '../../reducers/appStateReducer';
+import Loader from '../Loader/Loader';
+import { SearchResult } from 'types/models';
+import { RootState } from '../../stores/store';
 import { IMAGE_URL } from '../../api/variables';
+import './ItemsList.css';
 
-function SearchResult(props: SearchResultProps) {
+function ItemsList(props: SearchResultProps) {
   const { isLoading, onResultClick } = props;
-  const { state } = useAppState();
-  const { searchResults } = state;
+  const dispatch = useDispatch();
+  const searchResults: SearchResult[] = useSelector(
+    (state: RootState) => state.appState.searchResults
+  );
 
   const handleItemClick = (url: string) => {
     const urlParts = url.split('/');
     const id = urlParts[urlParts.length - 2];
     onResultClick(id);
+
+    dispatch(setImageUrl(url));
   };
 
   return (
@@ -42,4 +49,4 @@ function SearchResult(props: SearchResultProps) {
   );
 }
 
-export default SearchResult;
+export default ItemsList;
