@@ -59,7 +59,7 @@ function Pagination(props: PaginationProps) {
           className={`pagination-number ${
             pageNumber === +page ? 'active' : ''
           }`}
-          onClick={() => setPage(page)}
+          onClick={() => setPage(pageNumber)}
         >
           {pageNumber}
         </button>
