@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { PaginationProps } from '../../types/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,11 +34,6 @@ function Pagination(props: PaginationProps) {
     navigate(`/main?page=${newPage}&perPage=${itemsPerPage}`);
   };
 
-  useEffect(() => {
-    const currentPage = page === null ? 1 : Number(page);
-    setPage(currentPage);
-  }, [page, itemsPerPage]);
-
   const setPerPage = (newPerPage: number) => {
     dispatch(setItemsPerPage(newPerPage));
     setParams((prev) => {
@@ -64,7 +59,7 @@ function Pagination(props: PaginationProps) {
           className={`pagination-number ${
             pageNumber === +page ? 'active' : ''
           }`}
-          onClick={() => setPage(pageNumber)}
+          onClick={() => setPage(page)}
         >
           {pageNumber}
         </button>

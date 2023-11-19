@@ -1,4 +1,4 @@
-import { SearchResult } from './models';
+import { ApiResponse, SearchResult } from './models';
 
 export interface ErrorBoundaryProps {
   FallbackComponent: React.ComponentType<{
@@ -19,7 +19,7 @@ export interface ErrorFallbackProps {
 }
 
 export interface SearchInputProps {
-  onSearch: (
+  onSearch?: (
     searchTerm: string,
     page: number,
     itemsPerPage: number,
@@ -32,14 +32,16 @@ export interface SearchInputState {
 }
 
 export interface SearchResultProps {
-  results: {
-    url: string;
-    name: string;
-    description: string;
-    image: string;
-  }[];
   isLoading: boolean;
   onResultClick: (url: string) => void;
+  results:
+    | {
+        url: string;
+        name: string;
+        description: string;
+        image: string;
+      }[]
+    | ApiResponse;
 }
 
 export interface ErrorBoundaryState {

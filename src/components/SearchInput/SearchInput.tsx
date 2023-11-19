@@ -18,7 +18,10 @@ function SearchInput(props: SearchInputProps) {
   };
 
   const handleSearch = () => {
-    props.onSearch(searchTerm, 1, 10, '');
+    if (props.onSearch) {
+      props.onSearch(searchTerm, 1, 10, '');
+    }
+
     localStorage.setItem('searchTerm', searchTerm);
   };
 
