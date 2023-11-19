@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import appStateReducer from '../reducers/appStateReducer';
 import { api } from '../api/apiService';
+import localStorageMiddleware from '../middleware/localStorageMiddleWare';
 
 const store = configureStore({
   reducer: {
@@ -8,7 +9,7 @@ const store = configureStore({
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
+    getDefaultMiddleware().concat(api.middleware, localStorageMiddleware),
 });
 
 export default store;
