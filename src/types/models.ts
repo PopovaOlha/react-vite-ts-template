@@ -10,4 +10,5 @@ export interface SearchResult {
 
 export interface ApiResponse {
   results: SearchResult[];
+  count: number;
 }

@@ -1,63 +1,37 @@
-import { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useSearchQuery } from '../api/apiService';
+import ErrorFallback from '../components/errorBoundary/ErrorFallback';
 import SearchInput from '../components/SearchInput/SearchInput';
 import Search from '../components/ItemsList/ItemsList';
-import { ErrorBoundary } from 'react-error-boundary';
-import { searchApi } from '../api/api';
-import ErrorFallback from '../components/errorBoundary/ErrorFallback';
 import Pagination from '../components/Pagination/Pagination';
-import { ApiResponse } from '../types/models';
-import './Main.css';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setSearchResults, setIsLoading } from '../reducers/appStateReducer';
-import { RootState } from 'stores/store';
 
 function Main() {
   const dispatch = useDispatch();
-  const { searchResults, isLoading } = useSelector(
-    (state: RootState) => state.appState
-  );
-
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const page = params.get('page');
-  const perPage = params.get('perPage');
+  const page = params.get('page') || '1';
+  const perPage = params.get('perPage') || '10';
 
-  const handleSearch = useCallback(
-    async (searchTerm: string, page: number, itemsPerPage: number) => {
-      dispatch(setIsLoading(true));
-      try {
-        const response: ApiResponse = await searchApi.search(
-          searchTerm,
-          page,
-          itemsPerPage
-        );
-        console.log('response: ', response);
+  const searchTerm = params.get('search') || '';
 
-        localStorage.setItem('searchTerm', searchTerm);
-
-        dispatch(setSearchResults(response.results || []));
-        dispatch(setIsLoading(false));
-      } catch (error) {
-        console.error(error);
-        dispatch(setIsLoading(false));
-      }
-    },
-    [dispatch]
-  );
+  const { data: searchResults, isLoading } = useSearchQuery({
+    searchTerm: searchTerm,
+    page: Number(page),
+    itemsPerPage: Number(perPage),
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      await handleSearch(
-        '',
-        page === null || page === '0' ? 1 : Number(page),
-        perPage === null ? 10 : Number(perPage)
-      );
-    };
+    dispatch(setIsLoading(true));
 
-    fetchData();
-  }, [handleSearch, page, perPage]);
+    if (searchResults) {
+      dispatch(setSearchResults(searchResults.results || []));
+      dispatch(setIsLoading(false));
+    }
+  }, [dispatch, searchResults]);
 
   const handleResultClick = (itemId: string) => {
     navigate(`/details/${itemId}`);
@@ -66,18 +40,26 @@ function Main() {
   return (
     <div className="main-container">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <SearchInput onSearch={handleSearch} />
+        <SearchInput
+          onSearch={(newSearchTerm) =>
+            navigate(
+              `/?search=${encodeURIComponent(
+                newSearchTerm
+              )}&page=${page}&perPage=${perPage}`
+            )
+          }
+        />
         <Search
-          results={searchResults}
+          results={searchResults?.results || []}
           isLoading={isLoading}
           onResultClick={handleResultClick}
         />
         <Pagination
           totalPages={
-            perPage ? Math.ceil(searchResults.length / Number(perPage)) : 0
+            searchResults ? Math.ceil(searchResults.count / Number(perPage)) : 0
           }
-          page={page === null ? 0 : Number(page)}
-          totalResults={searchResults.length}
+          page={Number(page)}
+          totalResults={searchResults ? searchResults.count : 0}
         />
       </ErrorBoundary>
     </div>
