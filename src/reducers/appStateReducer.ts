@@ -9,10 +9,13 @@ const appStateSlice = createSlice({
     pageNumber: 1,
     itemsPerPage: 10,
     imageUrl: '',
+    mainPageLoading: false,
+    detailsPageLoading: false,
   },
   reducers: {
     setSearchResults: (state, action) => {
       state.searchResults = action.payload;
+      state.isLoading = false;
     },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -29,6 +32,9 @@ const appStateSlice = createSlice({
     setImageUrl: (state, action) => {
       state.imageUrl = action.payload;
     },
+    setMainPageLoading: (state, action) => {
+      state.mainPageLoading = action.payload;
+    },
   },
 });
 
@@ -38,6 +44,7 @@ export const {
   setSearchTerm,
   setPageNumber,
   setItemsPerPage,
+  setMainPageLoading,
   setImageUrl,
 } = appStateSlice.actions;
 export default appStateSlice.reducer;

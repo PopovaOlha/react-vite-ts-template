@@ -1,28 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import './SearchInput.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchTerm } from '../../reducers/appStateReducer';
 import { RootState } from '../../stores/store';
 
-import { SearchInputProps } from '../../types/interfaces';
-import './SearchInput.css';
+interface SearchInputProps {
+  onSearch: (
+    searchTerm: string,
+    page: number,
+    itemsPerPage: number,
+    pageUrl: string
+  ) => void;
+}
 
 function SearchInput(props: SearchInputProps) {
   const dispatch = useDispatch();
-  const searchTerm = useSelector(
+  const searchTermRedux = useSelector(
     (state: RootState) => state.appState.searchTerm
   );
+  const [searchTerm, setSearchTermState] = useState(searchTermRedux);
+
+  useEffect(() => {
+    setSearchTermState(searchTermRedux);
+  }, [searchTermRedux]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value.trim();
-    dispatch(setSearchTerm(newSearchTerm));
+    setSearchTermState(newSearchTerm);
   };
 
   const handleSearch = () => {
+    dispatch(setSearchTerm(searchTerm));
+    localStorage.setItem('searchTerm', searchTerm);
     if (props.onSearch) {
       props.onSearch(searchTerm, 1, 10, '');
     }
-
-    localStorage.setItem('searchTerm', searchTerm);
   };
 
   return (
