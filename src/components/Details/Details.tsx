@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import './Details.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import './Details.css';
-import { API_URL, IMAGE_URL } from '../../api/variables';
+import { useGetDetailsQuery } from '../../api/apiService';
 import { setIsLoading } from '../../reducers/appStateReducer';
 import { RootState } from '../../stores/store';
+import { IMAGE_URL } from '../../api/variables';
 
 function Details() {
   const { itemId } = useParams();
@@ -14,28 +14,11 @@ function Details() {
 
   const isLoading = useSelector((state: RootState) => state.appState.isLoading);
 
-  const [details, setDetails] = useState<{
-    name: string;
-    height: string;
-    mass: string;
-    url: string;
-  } | null>(null);
+  const { data: details } = useGetDetailsQuery(itemId);
 
   useEffect(() => {
-    const fetchDetails = async () => {
-      dispatch(setIsLoading(true));
-      try {
-        const response = await axios.get(`${API_URL}/${itemId}/`);
-        const data = response.data;
-        setDetails(data);
-      } catch (error) {
-        console.error('Ошибка при загрузке деталей:', error);
-      }
-      dispatch(setIsLoading(false));
-    };
-
-    fetchDetails();
-  }, [itemId, dispatch]);
+    dispatch(setIsLoading(isLoading));
+  }, [dispatch, isLoading]);
 
   const handleCloseDetails = () => {
     navigate(`/main`);
@@ -52,11 +35,13 @@ function Details() {
             Height: {details.height || 'N/A'}
           </p>
           <p className="details-description">Mass: {details.mass || 'N/A'}</p>
-          <img
-            className="hero-card"
-            src={`${IMAGE_URL}${details.url.match(/\d+/)}.jpg` || 'N/A'}
-            alt={details.name}
-          />
+          {details.url && (
+            <img
+              className="hero-card"
+              src={`${IMAGE_URL}${details.url.match(/\d+/)}.jpg` || 'N/A'}
+              alt={details.name}
+            />
+          )}
           <button className="close-button" onClick={handleCloseDetails}>
             Close
           </button>

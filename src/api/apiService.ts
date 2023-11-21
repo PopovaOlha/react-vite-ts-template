@@ -16,7 +16,13 @@ export const api = createApi({
           : { page, itemsPerPage },
       }),
     }),
+    getDetails: builder.query<
+      { name: string; height: string; mass: string; url: string },
+      string
+    >({
+      query: (itemId) => `/people/${itemId}`,
+    }),
   }),
 });
 
-export const { useSearchQuery } = api;
+export const { useSearchQuery, useGetDetailsQuery } = api;
