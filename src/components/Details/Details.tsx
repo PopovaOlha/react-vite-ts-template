@@ -47,7 +47,7 @@ function Details() {
           </button>
         </div>
       ) : (
-        <div>Детали для этого элемента недоступны.</div>
+        <div>No details available for this item.</div>
       )}
     </div>
   );
