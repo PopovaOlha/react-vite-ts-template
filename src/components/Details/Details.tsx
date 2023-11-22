@@ -1,20 +1,17 @@
 import React, { useEffect } from 'react';
 import './Details.css';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetDetailsQuery } from '../../api/apiService';
-import { setIsLoading } from '../../reducers/appStateReducer';
-import { RootState } from '../../stores/store';
+import { useAppDispatch } from '../../stores/store';
 import { IMAGE_URL } from '../../api/variables';
+import { setIsLoading } from '../../reducers/appStateReducer';
 
 function Details() {
   const { itemId } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const isLoading = useSelector((state: RootState) => state.appState.isLoading);
-
-  const { data: details } = useGetDetailsQuery(itemId);
+  const { data: details, isLoading } = useGetDetailsQuery(itemId!);
 
   useEffect(() => {
     dispatch(setIsLoading(isLoading));
