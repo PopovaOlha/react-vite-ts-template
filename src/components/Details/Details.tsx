@@ -1,14 +1,16 @@
+'use client';
 import React, { useEffect } from 'react';
 import './Details.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useRouter } from 'next/router'; // Import Next.js router
 import { useGetDetailsQuery } from '../../api/apiService';
 import { useAppDispatch } from '../../stores/store';
 import { IMAGE_URL } from '../../api/variables';
 import { setIsLoading } from '../../reducers/appStateReducer';
 
 function Details() {
-  const { itemId } = useParams();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const itemId = router.query.itemId as string | undefined;
+
   const dispatch = useAppDispatch();
 
   const { data: details, isLoading } = useGetDetailsQuery(itemId!);
@@ -18,7 +20,7 @@ function Details() {
   }, [dispatch, isLoading]);
 
   const handleCloseDetails = () => {
-    navigate(`/main`);
+    router.push('/main');
   };
 
   return (
